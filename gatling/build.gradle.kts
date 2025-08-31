@@ -1,8 +1,11 @@
 plugins {
     id("java")
+    id("io.gatling.gradle") version "3.14.3.7"
+    kotlin("jvm") version "2.2.10"
+    kotlin("plugin.allopen") version "2.2.10"
 }
 
-group = "com.food.ordering.system"
+group = "com.performance.playground"
 version = "1.0-SNAPSHOT"
 
 repositories {
@@ -17,4 +20,16 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
+}
+
+gatling {
+    gatlingVersion = "3.13.4"
+    jvmArgs = listOf(
+        "-server",
+        "-Xms512M",
+        "-Xmx512M",
+        "--add-opens=java.base/java.lang=ALL-UNNAMED",
+        "--add-opens=java.base/java.util=ALL-UNNAMED"
+    )
+    systemProperties = mapOf("file.encoding" to "UTF-8")
 }
