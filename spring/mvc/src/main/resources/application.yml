@@ -1,0 +1,11 @@
+
+spring:
+  application:
+    name: mvc
+  threads:
+    virtual:
+      enabled: on
+
+server:
+  port: 8090
+
