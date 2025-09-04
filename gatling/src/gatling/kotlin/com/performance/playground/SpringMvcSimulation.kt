@@ -10,9 +10,6 @@ import java.time.Duration
 
 class SpringMvcSimulation : Simulation() {
 
-    // Load VU count from system properties
-    private val vu: Int = Integer.getInteger("vu", 10000)
-
     // Define HTTP configuration
     private val httpProtocol: HttpProtocolBuilder = http
         .baseUrl("http://localhost:8090")
@@ -20,6 +17,7 @@ class SpringMvcSimulation : Simulation() {
         .userAgentHeader(
             "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36"
         )
+        .shareConnections()
 
     // Define scenario
     private val returnOnlyOkCode: ScenarioBuilder = scenario("Return only ok code")
@@ -39,8 +37,6 @@ class SpringMvcSimulation : Simulation() {
                 .injectOpen(
                     rampUsersPerSec(0.0).to(500.0).during(Duration.ofSeconds(1)),
                     constantUsersPerSec(500.0).during(Duration.ofMinutes(1))
-//                    stressPeakUsers(10000).during(20)
-//                    stressPeakUsers(15000).during(20)
 
                 )
         )
