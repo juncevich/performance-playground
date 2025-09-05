@@ -33,12 +33,18 @@ class SpringMvcSimulation : Simulation() {
     init {
         setUp(
 //            returnOnlyOkCode
-            returnOkCodeString
-                .injectOpen(
-                    rampUsersPerSec(0.0).to(500.0).during(Duration.ofSeconds(1)),
-                    constantUsersPerSec(500.0).during(Duration.ofMinutes(1))
-
-                )
+////            returnOkCodeString
+//                .injectOpen(
+//                    rampUsersPerSec(0.0).to(2000.0).during(Duration.ofSeconds(1)),
+//                    constantUsersPerSec(2000.0).during(Duration.ofMinutes(1))
+//
+//                )
+            returnOnlyOkCode.injectClosed(
+                // first ramp the number of concurrent users to 100 users in 1 minute
+                rampConcurrentUsers(0).to(2000).during(Duration.ofSeconds(30)),
+                // then keep a steady number of concurrent users of 100 users during 10 minutes
+                constantConcurrentUsers(2000).during(Duration.ofMinutes(1))
+            )
         )
             .assertions(assertion)
             .protocols(httpProtocol)

@@ -32,15 +32,22 @@ class GolangGinSimulation : Simulation() {
     // Define injection profile and execute the test
     init {
         setUp(
-            returnOnlyOkCode
+//            returnOnlyOkCode
 //            returnOkCodeString
-                .injectOpen(
-                    rampUsersPerSec(0.0).to(2000.0).during(Duration.ofSeconds(30)),
-                    constantUsersPerSec(2000.0).during(Duration.ofMinutes(1))
-//                    stressPeakUsers(10000).during(20)
-//                    stressPeakUsers(15000).during(20)
+//                .injectOpen(
+//                    rampUsersPerSec(0.0).to(2000.0).during(Duration.ofSeconds(30)),
+//                    constantUsersPerSec(2000.0).during(Duration.ofMinutes(1))
+////                    stressPeakUsers(10000).during(20)
+////                    stressPeakUsers(15000).during(20)
+//
+//                )
+            returnOnlyOkCode.injectClosed(
+                // first ramp the number of concurrent users to 100 users in 1 minute
+                rampConcurrentUsers(0).to(2000).during(Duration.ofSeconds(30)),
+                // then keep a steady number of concurrent users of 100 users during 10 minutes
+                constantConcurrentUsers(2000).during(Duration.ofMinutes(1))
+            )
 
-                )
         )
             .assertions(assertion)
             .protocols(httpProtocol)
